@@ -3,9 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>tempchat</title>
+  <meta name="color-scheme" content="light dark">
+
+  <link rel="stylesheet" href="/src/style.css">
+
+  <title>Tempchat</title>
 </head>
 <body>
+  <div class="container">
+    <div id="chat">
+      <div class="top">
+        <span class="id"></span>
+        <span class="name"></span>
+      </div>
+      
+      <div class="content"></div>
+
+      <div class="input">
+        <input type="button" value="+">
+        <textarea name="message-input" id="message-input" placeholder="Message Aero..."></textarea>
+        <input type="submit" id="send-btn" value="Send">
+      </div>
+    </div>
+  </div>
+
+  <dialog id="name-dialog" open>
+    <form>
+      <div class="field">
+        <label for="id">Enter name to appear as:</label>
+        <input type="text" name="name" id="name" autocomplete="on">
+      </div>
+
+      <input type="submit" id="create-account-btn" value="Create account">
+    </form>
+  </dialog>
+
+  <dialog id="id-dialog">
+    <form>
+      <div class="field">
+        <label for="id">Enter ID to connect to:</label>
+        <input type="text" name="id" id="id" autocomplete="on">
+      </div>
   
+      <input type="submit" id="connect-btn" value="Connect">
+    </form>
+  </dialog>
 </body>
 </html>
