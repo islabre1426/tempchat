@@ -4,33 +4,22 @@ import {
     v4 as uuidv4,
 } from 'uuid';
 
-import { Peer } from 'peerjs';
+const container = document.getElementById('container');
 
-const container = document.getElementById('container') as HTMLDivElement;
+const topIdElement = document.querySelector('#chat .id');
+const topNameElement = document.querySelector('#chat .name');
 
-const topIdElement = document.querySelector('#chat .id') as HTMLSpanElement;
-const topNameElement = document.querySelector('#chat .name') as HTMLSpanElement;
+const chatContent = document.querySelector('#chat .content');
+const messageInput = document.getElementById('message-input');
+const sendButton = document.getElementById('send-btn');
 
-const chatContent = document.querySelector('#chat .content') as HTMLDivElement;
-const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
-const sendButton = document.getElementById('send-btn') as HTMLInputElement;
-
-const nameDialog = document.getElementById('name-dialog') as HTMLDialogElement;
-const nameInput = document.getElementById('name') as HTMLInputElement;
-const createAccountBtn = document.getElementById('create-account-btn') as HTMLButtonElement;
+const nameDialog = document.getElementById('name-dialog');
+const nameInput = document.getElementById('name');
+const createAccountBtn = document.getElementById('create-account-btn');
 
 const systemName = 'System';
 
-type peerInfo = {
-    name: string,
-    id: string,
-    peer: Peer,
-};
-
-let hostInfo: peerInfo;
-let remoteInfo: peerInfo;
-
-let noRemoteIdNotice: boolean = true;
+let hostInfo, remoteInfo;
 
 nameInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
@@ -43,9 +32,7 @@ nameInput.addEventListener('keydown', (e) => {
 });
 
 createAccountBtn.addEventListener('click', () => {
-    const nameInput = document.getElementById('name') as HTMLInputElement;
-
-    handleNameDialog(nameInput);
+    handleNameDialog(document.getElementById('name'));
 });
 
 messageInput.addEventListener('keydown', (e) => {
@@ -57,20 +44,17 @@ messageInput.addEventListener('keydown', (e) => {
 });
 
 sendButton.addEventListener('click', () => {
-    const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
-
-    handleMessageSend(messageInput);
+    handleMessageSend(document.getElementById('message-input'));
 });
 
 
 
-function handleNameDialog(inputElement: HTMLInputElement) {
+function handleNameDialog(inputElement) {
     const uuid = uuidv4();
 
     hostInfo = {
         name: inputElement.value,
         id: uuid,
-        peer: new Peer(uuid),
     };
 
     console.log('Account name:', hostInfo.name);
@@ -83,11 +67,10 @@ function handleNameDialog(inputElement: HTMLInputElement) {
     container.style.display = 'flex';
 }
 
-function handleMessageSend(messageElement: HTMLTextAreaElement) {
+function handleMessageSend(messageElement) {
     let message = messageElement.value.trim();
 
     const commandRegex = /^\/[^\s\/].+$/m;
-
     const matchedCommand = commandRegex.exec(message);
 
     insertMessageText(message, hostInfo.name);
@@ -99,7 +82,7 @@ function handleMessageSend(messageElement: HTMLTextAreaElement) {
         return;
     }
 
-    if (noRemoteIdNotice) {
+    if (!remoteInfo) {
         const noticeMessage = `\
         You are not connected to any account. Any message you sent will remain on your machine and won't be seen by others.
         `;
@@ -110,7 +93,7 @@ function handleMessageSend(messageElement: HTMLTextAreaElement) {
     }
 }
 
-function insertMessageText(message: string, author: string) {
+function insertMessageText(message, author) {
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message');
 
@@ -134,7 +117,7 @@ function insertMessageText(message: string, author: string) {
     chatContent.appendChild(messageContainer);
 }
 
-function handleCommandFromMessage(command: string) {
+function handleCommandFromMessage(command) {
     const commandParts = command.split(' ');
 
     switch (commandParts[0]) {
@@ -180,9 +163,6 @@ function handleCommandFromMessage(command: string) {
             }
 
             // TODO: Connect to remote peer
-            // hostInfo.peer.connect(remoteId, {
-
-            // });
 
             break;
 
@@ -190,6 +170,6 @@ function handleCommandFromMessage(command: string) {
     }
 }
 
-function validateUuid(uuid: string) {
+function validateUuid(uuid) {
     return uuidValidate(uuid) && uuidVersion(uuid) === 4;
 }
