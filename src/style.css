@@ -9,11 +9,11 @@ body {
     height: 100vh;
 }
 
-input, textarea {
+input, textarea, button {
     font-size: inherit;
 }
 
-input[type="button"], input[type="text"], input[type="submit"], textarea {
+input[type="button"], input[type="text"], input[type="submit"], textarea, button {
     padding: 0.5em;
 }
 
@@ -21,11 +21,11 @@ textarea {
     font-family: inherit;
 }
 
-input[type="button"], input[type="submit"] {
+input[type="button"], input[type="submit"], button {
     cursor: pointer;
 }
 
-.container {
+#container {
     display: none;
     flex-direction: column;
 
@@ -79,6 +79,15 @@ input[type="button"], input[type="submit"] {
 
 #chat .message-content span {
     white-space: pre-line;
+}
+
+table, td {
+    border: 2px solid;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 0.25em 0.5em;
 }
 
 #chat .message-content :not(span) {
