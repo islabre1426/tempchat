@@ -62,18 +62,32 @@ files.addEventListener('change', () => {
         return;
     }
 
-    Array.from(files.files).forEach((file) => {
+    const fileListArray = Array.from(files.files);
+    if (fileListArray.length === 0) return;
+
+    const filesDataToSend = [];
+    let combinedLinksHtml = '<div class="file-group">';
+
+    fileListArray.forEach((file) => {
         const localUrl = URL.createObjectURL(file);
-        const hostFileLinkHtml = `<a href="${localUrl}" download="${file.name}">${file.name}</a> (${formatBytes(file.size)})`;
 
-        insertMessageText(hostFileLinkHtml, hostInfo.name);
-
-        hostInfo.conn.send({
-            type: 'file',
+        combinedLinksHtml += `<div><a href="${localUrl}" download="${file.name}">${file.name}</a> (${formatBytes(file.size)})</div>`;
+        
+        filesDataToSend.push({
             fileName: file.name,
             fileData: file,
             fileSize: file.size,
         });
+    });
+
+    combinedLinksHtml += '</div>';
+
+    // Show all download links as a single message
+    insertMessageText(combinedLinksHtml, hostInfo.name);
+
+    hostInfo.conn.send({
+        type: 'filesBatch',
+        files: filesDataToSend,
     });
 
     // Reset input so we can upload the same files again when needed
@@ -315,13 +329,20 @@ function handleDataConnectionEvent(conn) {
                     return;
                 }
 
-                if (data.type === 'file') {
-                    const blob = new Blob([data.fileData]);
-                    const downloadUrl = URL.createObjectURL(blob);
+                if (data.type === 'filesBatch' && Array.isArray(data.files)) {
+                    let combinedLinksHtml = '<div class="file-group">';
 
-                    const fileLinkHtml = `<a href="${downloadUrl}" download="${data.fileName}">${data.fileName}</a> (${formatBytes(data.fileSize)})`;
+                    data.files.forEach((file) => {
+                        const blob = new Blob([file.fileData]);
+                        const downloadUrl = URL.createObjectURL(blob);
 
-                    insertMessageText(fileLinkHtml, remoteName);
+                        combinedLinksHtml += `<div><a href="${downloadUrl}" download="${file.fileName}">${file.fileName}</a> (${formatBytes(file.fileSize)})</div>`;
+                    });
+
+                    combinedLinksHtml += '</div>';
+
+                    // Insert the bundled payload message once
+                    insertMessageText(combinedLinksHtml, remoteName);
                     return;
                 }
             }
@@ -338,7 +359,7 @@ function handleDataConnectionEvent(conn) {
     }
 
     conn.on('close', () => {
-        insertMessageText(`Connection to ${remoteName} closed.`, systemName);
+        insertMessageText(`Connection to ${conn.peer} closed.`, systemName);
     });
 }
 
