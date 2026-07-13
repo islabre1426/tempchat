@@ -149,6 +149,9 @@ function handleMessageSend(messageElement) {
 }
 
 function insertMessageText(message, author) {
+    const threshold = 10;
+    const isAtBottom = (chatContent.scrollHeight - chatContent.scrollTop - chatContent.clientHeight) <= threshold;
+
     const lastMessage = document.querySelector('.message-content.last');
 
     if (lastMessage) {
@@ -176,6 +179,10 @@ function insertMessageText(message, author) {
     `;
 
     chatContent.appendChild(messageContainer);
+
+    if (isAtBottom) {
+        chatContent.scrollTop = chatContent.scrollHeight;
+    }
 }
 
 function handleCommandFromMessage(command) {
