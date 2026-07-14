@@ -8,8 +8,7 @@ import { Peer } from 'peerjs';
 
 const container = document.getElementById('container');
 
-const topIdElement = document.querySelector('#chat .id');
-const topNameElement = document.querySelector('#chat .name');
+const topNameElement = document.getElementById('top-name');
 
 const chatContent = document.querySelector('#chat .content');
 const uploadFiles = document.getElementById('upload-files');
@@ -20,6 +19,11 @@ const sendButton = document.getElementById('send-btn');
 const nameDialog = document.getElementById('name-dialog');
 const nameInput = document.getElementById('name');
 const createAccountBtn = document.getElementById('create-account-btn');
+
+const infoDialog = document.getElementById('info-dialog');
+const infoDialogCloseButton = document.querySelector('#info-dialog .close-button');
+const infoName = document.getElementById('info-name');
+const copyId = document.getElementById('copy-id');
 
 const systemName = 'System';
 
@@ -94,6 +98,16 @@ files.addEventListener('change', () => {
     files.value = '';
 });
 
+infoDialog.addEventListener('beforetoggle', () => {
+    infoDialog.classList.toggle('open');
+});
+
+infoDialogCloseButton.addEventListener('click', () => {
+    if (infoDialog.classList.contains('open')) {
+        infoDialog.hidePopover();
+    }
+});
+
 
 
 function handleNameDialog(inputElement) {
@@ -111,8 +125,11 @@ function handleNameDialog(inputElement) {
     console.log('Account name:', hostInfo.name);
     console.log('Generated host ID:', hostInfo.id);
 
-    topIdElement.textContent = `Your ID: ${hostInfo.id}`;
-    topNameElement.textContent = `Your name: ${hostInfo.name}`;
+    topNameElement.textContent = `${hostInfo.name}`;
+    infoName.textContent = `${hostInfo.name}`;
+    copyId.textContent = `${hostInfo.id}`;
+
+    handleCopyId();
 
     // Show the chat
     container.style.display = 'flex';
@@ -126,15 +143,16 @@ function handleMessageSend(messageElement) {
 
     insertMessageText(message, hostInfo.name);
 
-    if (hostInfo.conn) {
-        hostInfo.conn.send(message);
-    }
-
     messageElement.value = '';
 
     if (matchedCommand) {
         handleCommandFromMessage(matchedCommand[0]);
         return;
+    }
+
+    // Only send normal messages to remote
+    if (hostInfo.conn) {
+        hostInfo.conn.send(message);
     }
 
     if (noRemoteIdNotice) {
@@ -367,6 +385,8 @@ function handleDataConnectionEvent(conn) {
 
     conn.on('close', () => {
         insertMessageText(`Connection to ${conn.peer} closed.`, systemName);
+
+        noRemoteIdNotice = true;
     });
 }
 
@@ -388,6 +408,14 @@ function buildHelpMessage(commands, element) {
     });
 
     element.appendChild(table);
+}
+
+function handleCopyId() {
+    const copyId = document.getElementById('copy-id');
+
+    copyId.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(copyId.textContent);
+    });
 }
 
 function validateUuid(uuid) {

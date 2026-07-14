@@ -13,8 +13,7 @@
   <div id="container">
     <div id="chat">
       <div class="top">
-        <span class="id"></span>
-        <span class="name"></span>
+        <button type="button" id="top-name" popovertarget="info-dialog"></button>
       </div>
       
       <div class="content"></div>
@@ -37,6 +36,26 @@
 
       <button type="button" id="create-account-btn" commandfor="name-dialog" command="close">Create account</button>
     </form>
+  </dialog>
+
+  <dialog id="info-dialog" popover="auto">
+    <div class="dialog-menubar">
+      <button type="button" class="close-button">X</button>
+    </div>
+
+    <p>Your information:</p>
+    <table>
+      <tr>
+        <td>Name</td>
+        <td id="info-name"></td>
+      </tr>
+      <tr>
+        <td>ID</td>
+        <td>
+          <button type="button" id="copy-id"></button> (click to copy)
+        </td>
+      </tr>
+    </table>
   </dialog>
 
   <script type="module" src="/src/main.js"></script>

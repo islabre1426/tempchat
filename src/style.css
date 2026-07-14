@@ -56,11 +56,7 @@ input[type="button"], input[type="submit"], button {
     flex-grow: 0;
 
     display: flex;
-    justify-content: space-between;
-}
-
-#chat .top .name {
-    text-align: right;
+    justify-content: end;
 }
 
 #chat .content {
@@ -125,7 +121,7 @@ dialog {
     align-items: center;
 }
 
-dialog:open {
+dialog:open, dialog:popover-open {
     display: flex;
 }
 
@@ -147,6 +143,38 @@ dialog .field label {
     margin-bottom: 0.5em;
 }
 
+#info-dialog {
+    flex-direction: column;
+    align-items: start;
+    padding: 1em;
+}
+
+#info-dialog::backdrop {
+    background-color: black;
+    opacity: 0.5;
+}
+
+#info-dialog .dialog-menubar {
+    width: 100%;
+
+    display: flex;
+    justify-content: end;
+
+    margin-bottom: 1em;
+}
+
+#info-dialog p {
+    margin-top: 0;
+}
+
+#info-dialog table {
+    width: 100%;
+}
+
+#info-dialog table td:nth-child(2) {
+    text-align: right;
+}
+
 @supports (overflow-anchor: auto) {
     #chat .content {
         overflow-anchor: auto;
@@ -156,12 +184,5 @@ dialog .field label {
 @media (width <= 1000px) {
     #chat, dialog {
         width: 100%;
-    }
-}
-
-@media (width <= 600px) {
-    #chat .top {
-        flex-direction: column;
-        text-align: right;
     }
 }
