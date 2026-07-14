@@ -75,12 +75,13 @@ files.addEventListener('change', () => {
     fileListArray.forEach((file) => {
         const localUrl = URL.createObjectURL(file);
 
-        combinedLinksHtml += `<div><a href="${localUrl}" download="${file.name}">${file.name}</a> (${formatBytes(file.size)})</div>`;
+        combinedLinksHtml += `<div><a href="${localUrl}">${file.name}</a> (${formatBytes(file.size)})</div>`;
         
         filesDataToSend.push({
             fileName: file.name,
             fileData: file,
             fileSize: file.size,
+            fileType: file.type,
         });
     });
 
@@ -358,10 +359,10 @@ function handleDataConnectionEvent(conn) {
                     let combinedLinksHtml = '<div class="file-group">';
 
                     data.files.forEach((file) => {
-                        const blob = new Blob([file.fileData]);
+                        const blob = new Blob([file.fileData], { type: file.fileType });
                         const downloadUrl = URL.createObjectURL(blob);
 
-                        combinedLinksHtml += `<div><a href="${downloadUrl}" download="${file.fileName}">${file.fileName}</a> (${formatBytes(file.fileSize)})</div>`;
+                        combinedLinksHtml += `<div><a href="${downloadUrl}">${file.fileName}</a> (${formatBytes(file.fileSize)})</div>`;
                     });
 
                     combinedLinksHtml += '</div>';
