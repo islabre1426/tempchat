@@ -2,7 +2,7 @@
 
 set -eu
 
-artifact="dist"
+artifact="dist/"
 remote_host="root@personal-server"
 name="tempchat"
 dest="/var/www/html/$name"
