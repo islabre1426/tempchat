@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Peer } from 'peerjs';
 
-import { hostInfo, systemName } from './constants.js';
+import { hostInfo, peerOptions, systemName } from './constants.js';
 import { handlePeerEvent } from './peer.js';
 import { insertMessage } from './message.js';
 
@@ -10,7 +10,7 @@ export function handleNameDialog(inputElement) {
 
     hostInfo.name = inputElement.value;
     hostInfo.id = uuid;
-    hostInfo.peer = new Peer(uuid);
+    hostInfo.peer = new Peer(uuid, peerOptions);
 
     handlePeerEvent(hostInfo.peer);
 
