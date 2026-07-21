@@ -73,10 +73,6 @@ input[type="button"], input[type="submit"], button {
     opacity: 0.5;
 }
 
-#chat .message-content span {
-    white-space: pre-line;
-}
-
 table, td {
     border: 2px solid;
     border-collapse: collapse;
