@@ -8,6 +8,11 @@ export function handlePeerEvent(peer) {
             `Connected to relay server with the ID ${id}.`,
             systemName,
         );
+
+        insertMessage(
+            'Welcome to tempchat! Send a message or use /help for a list of commands.',
+            systemName,
+        );
     });
 
     peer.on('connection', (incomingConn) => {

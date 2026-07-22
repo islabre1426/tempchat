@@ -6,7 +6,7 @@ body {
     font: 125%/1.5 sans-serif;
     margin: 0 auto;
 
-    height: 100vh;
+    height: 100dvh;
 }
 
 input, textarea, button {
@@ -84,7 +84,7 @@ td {
 
 #chat .message-content :not(span) {
     max-width: 100%;
-    max-height: 50vh;
+    max-height: 50dvh;
     margin-top: 0.25em;
 }
 

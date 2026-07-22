@@ -37,14 +37,13 @@ export function insertMessage(message, author) {
     if (!chatContent) return;
 
     // Measure threshold before inserting
-    const threshold = 10;
-    const isScrollbarAtBottom = (chatContent.scrollHeight - chatContent.scrollTop - chatContent.clientHeight) <= threshold;
+    const isAtBottom = isElementAtBottom(chatContent);
 
     chatContent.appendChild(messageContainer);
 
     // Keep it fixed when inserting message
-    if (isScrollbarAtBottom) {
-        chatContent.scrollTop = chatContent.scrollHeight;
+    if (isAtBottom) {
+        scrollToBottom(chatContent);
     }
 }
 
@@ -189,9 +188,26 @@ function buildHelpMessage(commands, element) {
         table.appendChild(tr);
     });
 
+    const chatContent = document.querySelector('#chat .content');
+    if (!chatContent) return;
+
+    const isAtBottom = isElementAtBottom(chatContent);
+
     element.appendChild(table);
+
+    if (isAtBottom) {
+        scrollToBottom(chatContent);
+    }
 }
 
 function validateUuid(uuid) {
     return uuidValidate(uuid) && uuidVersion(uuid) === 4;
+}
+
+function isElementAtBottom(element, threshold = 5) {
+    return Math.abs(element.scrollHeight - element.scrollTop - element.clientHeight) < threshold;
+}
+
+function scrollToBottom(element) {
+    element.scrollTop = element.scrollHeight;
 }
