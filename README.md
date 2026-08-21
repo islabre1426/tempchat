@@ -3,9 +3,13 @@ A temporary chat website, powered by PeerJS
 
 ## Dependencies
 - NodeJS + npm
-- Unix utilities (basename, sed, tr, etc.) (Git Bash or a Unix-like OS preferred)
-- rsync
-- ssh (for authorizing remote server, setup first)
+
+## Previewing website from source
+```bash
+git clone https://github.com/islabre1426/tempchat.git && cd tempchat
+npm install
+npm run dev
+```
 
 ## License
 - Source code is under [MIT License](./LICENSE)
